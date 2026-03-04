@@ -19,9 +19,9 @@ flowchart LR
     Handler -->|Route| Methods[initialize<br/>tools/list<br/>tools/call]
     Methods -->|Response| Client
 
-    style Server fill:#e1f5ff
-    style Handler fill:#fff4e1
-    style Methods fill:#e8f5e9
+    style Server fill:#1f6feb,stroke:#58a6ff,color:#ffffff
+    style Handler fill:#9e6a03,stroke:#d29922,color:#ffffff
+    style Methods fill:#238636,stroke:#2ea043,color:#ffffff
 ```
 
 **What changed:** Added test suite covering all protocol scenarios (9 tests).
@@ -51,6 +51,21 @@ graph TD
     E --> E1[✓ EOF handling]
     E --> E2[✓ Multiple requests]
     E --> E3[✓ Read errors]
+
+    style A fill:#1f6feb,stroke:#58a6ff,color:#ffffff
+    style B fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style C fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style D fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style E fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style B1 fill:#238636,stroke:#2ea043,color:#ffffff
+    style C1 fill:#238636,stroke:#2ea043,color:#ffffff
+    style C2 fill:#238636,stroke:#2ea043,color:#ffffff
+    style D1 fill:#238636,stroke:#2ea043,color:#ffffff
+    style D2 fill:#238636,stroke:#2ea043,color:#ffffff
+    style D3 fill:#238636,stroke:#2ea043,color:#ffffff
+    style E1 fill:#238636,stroke:#2ea043,color:#ffffff
+    style E2 fill:#238636,stroke:#2ea043,color:#ffffff
+    style E3 fill:#238636,stroke:#2ea043,color:#ffffff
 ```
 
 ---
@@ -65,7 +80,12 @@ flowchart TD
     Lint --> Manual[Manual Test]
     Manual --> Done[✓ All Pass]
 
-    style Done fill:#4caf50,color:#fff
+    style Build fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Unit fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Race fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Lint fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Manual fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Done fill:#238636,stroke:#2ea043,color:#ffffff
 ```
 
 **Quick Test:**
@@ -161,6 +181,48 @@ Choose based on **what the reader needs to understand**:
 | "What's the sequence?" | `sequenceDiagram` | Request/response flows |
 | "What states exist?" | `stateDiagram-v2` | Status machines, workflows |
 | "What's the git strategy?" | `gitGraph` | Branch/merge workflows |
+
+## Dark Theme Color Palette
+
+**GitHub's default dark theme colors** (optimized for readability):
+
+```mermaid
+graph LR
+    Neutral[Neutral/Default]
+    Primary[Primary/Action]
+    Success[Success/Done]
+    Warning[Warning/Caution]
+    Error[Error/Failed]
+
+    style Neutral fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style Primary fill:#1f6feb,stroke:#58a6ff,color:#ffffff
+    style Success fill:#238636,stroke:#2ea043,color:#ffffff
+    style Warning fill:#9e6a03,stroke:#d29922,color:#ffffff
+    style Error fill:#da3633,stroke:#f85149,color:#ffffff
+```
+
+**When to use each color:**
+
+| Color | Use Case | Mermaid Style |
+|-------|----------|---------------|
+| **Neutral** | Default nodes, in-progress states | `fill:#30363d,stroke:#1f6feb,color:#c9d1d9` |
+| **Primary** | Important nodes, key components | `fill:#1f6feb,stroke:#58a6ff,color:#ffffff` |
+| **Success** | Completed states, passing tests | `fill:#238636,stroke:#2ea043,color:#ffffff` |
+| **Warning** | Attention needed, deprecation | `fill:#9e6a03,stroke:#d29922,color:#ffffff` |
+| **Error** | Failed states, blocking issues | `fill:#da3633,stroke:#f85149,color:#ffffff` |
+
+**Example usage:**
+```markdown
+\```mermaid
+flowchart LR
+    A[Start] --> B[Process]
+    B --> C[Done]
+
+    style A fill:#30363d,stroke:#1f6feb,color:#c9d1d9
+    style B fill:#1f6feb,stroke:#58a6ff,color:#ffffff
+    style C fill:#238636,stroke:#2ea043,color:#ffffff
+\```
+```
 
 ## Anti-Patterns to Avoid
 
