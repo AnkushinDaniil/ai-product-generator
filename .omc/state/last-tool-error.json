@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"make lint\",\"timeout\":120000,\"description\":\"Run linter to verify remaining issues\"}",
-  "error": "Exit code 2\nmake: *** [lint] Error 1\n\nRunning linter...\ngolangci-lint run ./...\ninternal/config/config.go:28:2: Error return value of `godotenv.Load` is not checked (errcheck)\n\t_ = godotenv.Load() // .env file is optional\n\t^\ninternal/memory/types.go:6:13: fieldalignment: struct with 128 pointer bytes could be 120 (govet)\ntype Memory struct {\n            ^\ninternal/memory/types.go:17:18: fieldalignment: struct with 56 pointer bytes could be 48 (govet)\ntype SearchQuery struct {\n                 ^\n...",
-  "timestamp": "2026-03-04T13:27:51.025Z",
-  "retry_count": 1
-}

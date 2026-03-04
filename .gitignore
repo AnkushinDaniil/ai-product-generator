@@ -48,17 +48,12 @@ secrets.yaml
 # ===================================================================
 # OMC - Oh My Claude Code (ALL state is session/user-specific)
 # ===================================================================
-.omc/state/                    # All state files (sessions, agents, teams)
-.omc/sessions/                 # Session metadata
-.omc/research/                 # Research outputs
-.omc/project-memory.json       # Contains user-specific paths
-.omc/notepad.md                # Session working memory
-.omc/plans/                    # Planning documents (may contain ideas)
+.omc/                          # Entire OMC directory (state, sessions, plans, etc.)
 
 # ===================================================================
 # Agent Task Tracking (personal work and ideas)
 # ===================================================================
-.agent/tasks/                  # Work-in-progress tasks
+.agent/tasks/                  # Work-in-progress tasks (*.wip files, etc.)
 .agent/memory/                 # Memory bank (if contains personal notes)
 
 # ===================================================================
