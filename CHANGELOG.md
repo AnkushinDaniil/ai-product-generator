@@ -1,3 +1,29 @@
+## [2.0.0](https://github.com/AnkushinDaniil/memex/compare/v1.0.0...v2.0.0) (2026-03-05)
+
+### ⚠ BREAKING CHANGES
+
+* Project restructured to focus solely on Memex MCP Server
+
+- Remove AI Product Generator specific directories (agents/, feedback/, cmd/server/, specs/)
+- Update module name from github.com/ai-product-generator to github.com/AnkushinDaniil/memex
+- Update all import paths to use new module name
+- Update README.md to describe Memex MCP Server
+- Update Dockerfile for Memex (CGO enabled for SQLite)
+- Update Makefile to build memex binary
+- Update GitHub workflows (CI, release) to reference Memex
+- Update .claude/CLAUDE.md project documentation
+
+AI Product Generator is a separate project and has been removed from this repository.
+This repository is now dedicated to the Memex MCP Server for persistent AI memory storage.
+
+### Features
+
+* **mcp:** implement MCP protocol handler ([#6](https://github.com/AnkushinDaniil/memex/issues/6)) ([828b0ce](https://github.com/AnkushinDaniil/memex/commit/828b0ce77d74752c7ee725d766067af81a7fe07e)), closes [#2](https://github.com/AnkushinDaniil/memex/issues/2)
+
+### Code Refactoring
+
+* separate Memex project from AI Product Generator ([7783167](https://github.com/AnkushinDaniil/memex/commit/7783167bf47c89a3c77b0c4f98ff7076c89a46ac))
+
 ## 1.0.0 (2026-03-04)
 
 ### Features
