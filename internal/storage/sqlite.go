@@ -4,9 +4,8 @@ import (
 	"database/sql"
 	"errors"
 
-	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/AnkushinDaniil/memex/internal/memory"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // ErrNotImplemented is returned when a method is not yet implemented
