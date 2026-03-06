@@ -43,6 +43,50 @@ func (m *mockStorage) List(projectID string, limit int, tags []string) ([]memory
 	return nil, nil
 }
 
+func (m *mockStorage) Update(mem *memory.Memory) error {
+	return nil
+}
+
+func (m *mockStorage) CreateAnchor(anchor *memory.CodeAnchor) error {
+	return nil
+}
+
+func (m *mockStorage) GetAnchorsByMemory(memoryID string) ([]memory.CodeAnchor, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) FindMemoriesByAnchor(file string, line int) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) FindMemoriesInFile(file string) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) CreateConnection(conn *memory.MemoryConnection) error {
+	return nil
+}
+
+func (m *mockStorage) GetConnections(memoryID string) ([]memory.MemoryConnection, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) GetConnectedMemories(memoryID string, depth int) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) MarkStale(memoryID string, isStale bool) error {
+	return nil
+}
+
+func (m *mockStorage) MarkVerified(memoryID string) error {
+	return nil
+}
+
+func (m *mockStorage) GetStaleMemories(projectID string) ([]memory.Memory, error) {
+	return nil, nil
+}
+
 // testServer creates a server with custom reader and writer for testing
 func testServer(input string) (*Server, *bytes.Buffer) {
 	mockStore := &mockStorage{}
