@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -22,7 +23,8 @@ func main() {
 	}
 
 	// Initialize storage (create tables)
-	if err := store.Initialize(); err != nil {
+	ctx := context.Background()
+	if err := store.Initialize(ctx); err != nil {
 		// Close storage before fatal exit
 		if closeErr := store.Close(); closeErr != nil {
 			log.Printf("Error closing storage: %v", closeErr)

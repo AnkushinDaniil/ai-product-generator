@@ -3,6 +3,7 @@ package mcp
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"strings"
@@ -14,7 +15,7 @@ import (
 // mockStorage is a mock implementation of memory.Storage for testing
 type mockStorage struct{}
 
-func (m *mockStorage) Initialize() error {
+func (m *mockStorage) Initialize(_ context.Context) error {
 	return nil
 }
 
@@ -22,24 +23,68 @@ func (m *mockStorage) Close() error {
 	return nil
 }
 
-func (m *mockStorage) Create(mem *memory.Memory) error {
+func (m *mockStorage) Create(_ context.Context, _ *memory.Memory) error {
 	return nil
 }
 
-func (m *mockStorage) Get(id string) (*memory.Memory, error) {
+func (m *mockStorage) Get(_ context.Context, id string) (*memory.Memory, error) {
 	// Return a valid empty memory for testing
 	return &memory.Memory{ID: id}, nil
 }
 
-func (m *mockStorage) Delete(id string) error {
+func (m *mockStorage) Delete(_ context.Context, _ string) error {
 	return nil
 }
 
-func (m *mockStorage) Search(query memory.SearchQuery) ([]memory.SearchResult, error) {
+func (m *mockStorage) Search(_ context.Context, _ *memory.SearchQuery) ([]memory.SearchResult, error) {
 	return nil, nil
 }
 
-func (m *mockStorage) List(projectID string, limit int, tags []string) ([]memory.Memory, error) {
+func (m *mockStorage) List(_ context.Context, _ string, _ int, _ []string) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) Update(_ context.Context, _ *memory.Memory) error {
+	return nil
+}
+
+func (m *mockStorage) CreateAnchor(_ context.Context, _ *memory.CodeAnchor) error {
+	return nil
+}
+
+func (m *mockStorage) GetAnchorsByMemory(_ context.Context, _ string) ([]memory.CodeAnchor, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) FindMemoriesByAnchor(_ context.Context, _ string, _ int) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) FindMemoriesInFile(_ context.Context, _ string) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) CreateConnection(_ context.Context, _ *memory.MemoryConnection) error {
+	return nil
+}
+
+func (m *mockStorage) GetConnections(_ context.Context, _ string) ([]memory.MemoryConnection, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) GetConnectedMemories(_ context.Context, _ string, _ int) ([]memory.Memory, error) {
+	return nil, nil
+}
+
+func (m *mockStorage) MarkStale(_ context.Context, _ string, _ bool) error {
+	return nil
+}
+
+func (m *mockStorage) MarkVerified(_ context.Context, _ string) error {
+	return nil
+}
+
+func (m *mockStorage) GetStaleMemories(_ context.Context, _ string) ([]memory.Memory, error) {
 	return nil, nil
 }
 
@@ -435,6 +480,6 @@ type errorReader struct {
 	err error
 }
 
-func (e *errorReader) Read(p []byte) (n int, err error) {
+func (e *errorReader) Read(_ []byte) (n int, err error) {
 	return 0, e.err
 }

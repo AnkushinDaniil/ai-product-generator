@@ -47,7 +47,7 @@ jobs:
           cache: true
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+        run: CGO_ENABLED=1 go test -tags "fts5" -v -race -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Check coverage threshold
         run: |
@@ -101,7 +101,7 @@ jobs:
 
       - name: Build
         run: |
-          go build -o bin/memex ./cmd/memex
+          CGO_ENABLED=1 go build -tags "fts5" -o bin/memex ./cmd/memex
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

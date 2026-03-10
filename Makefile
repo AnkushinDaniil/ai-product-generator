@@ -10,10 +10,10 @@ COVERAGE_THRESHOLD ?= 80
 # Default target
 all: lint test build
 
-# Build the memex binary
+# Build the memex binary (with FTS5 support)
 build:
 	@echo "Building memex MCP server..."
-	go build $(LDFLAGS) -o bin/memex ./cmd/memex
+	CGO_ENABLED=1 go build -tags "fts5" $(LDFLAGS) -o bin/memex ./cmd/memex
 
 # Run the memex server
 run:
@@ -25,15 +25,15 @@ dev:
 	@which air > /dev/null || go install github.com/cosmtrek/air@latest
 	air
 
-# Run tests
+# Run tests (with FTS5 support)
 test:
 	@echo "Running tests..."
-	go test -v -race ./...
+	CGO_ENABLED=1 go test -tags "fts5" -v -race ./...
 
-# Run tests with coverage and threshold enforcement
+# Run tests with coverage and threshold enforcement (with FTS5 support)
 test-coverage:
 	@echo "Running tests with coverage..."
-	go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+	CGO_ENABLED=1 go test -tags "fts5" -v -race -coverprofile=coverage.out -covermode=atomic ./...
 	@echo "Checking coverage threshold ($(COVERAGE_THRESHOLD)%)..."
 	@go tool cover -func=coverage.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' | \
 		awk -v threshold=$(COVERAGE_THRESHOLD) '{if ($$1 < threshold) {print "Coverage " $$1 "% is below threshold " threshold "%"; exit 1} else {print "Coverage " $$1 "% meets threshold " threshold "%"}}'
