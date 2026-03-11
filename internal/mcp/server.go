@@ -215,7 +215,10 @@ func detectProjectID() string {
 
 // getGitRoot returns the git repository root directory
 func getGitRoot() string {
-	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, "git", "rev-parse", "--show-toplevel")
 	output, err := cmd.Output()
 	if err != nil || len(output) == 0 {
 		return ""

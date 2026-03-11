@@ -70,16 +70,16 @@ func (s *Server) executeRecall(ctx context.Context, params map[string]interface{
 
 	// Format results
 	memories := make([]map[string]interface{}, len(results))
-	for i, result := range results {
+	for i := range results {
 		memories[i] = map[string]interface{}{
-			"memory_id":  result.Memory.ID,
-			"content":    result.Memory.Content,
-			"type":       result.Memory.Type,
-			"tags":       result.Memory.Tags,
-			"priority":   result.Memory.Priority,
-			"score":      result.Score,
-			"is_stale":   result.Memory.IsStale,
-			"created_at": result.Memory.CreatedAt.Format(time.RFC3339),
+			"memory_id":  results[i].Memory.ID,
+			"content":    results[i].Memory.Content,
+			"type":       results[i].Memory.Type,
+			"tags":       results[i].Memory.Tags,
+			"priority":   results[i].Memory.Priority,
+			"score":      results[i].Score,
+			"is_stale":   results[i].Memory.IsStale,
+			"created_at": results[i].Memory.CreatedAt.Format(time.RFC3339),
 		}
 	}
 
@@ -123,15 +123,15 @@ func (s *Server) executeList(ctx context.Context, params map[string]interface{})
 
 	// Format results
 	result := make([]map[string]interface{}, len(memories))
-	for i, mem := range memories {
+	for i := range memories {
 		result[i] = map[string]interface{}{
-			"memory_id":  mem.ID,
-			"content":    mem.Content,
-			"type":       mem.Type,
-			"tags":       mem.Tags,
-			"priority":   mem.Priority,
-			"is_stale":   mem.IsStale,
-			"created_at": mem.CreatedAt.Format(time.RFC3339),
+			"memory_id":  memories[i].ID,
+			"content":    memories[i].Content,
+			"type":       memories[i].Type,
+			"tags":       memories[i].Tags,
+			"priority":   memories[i].Priority,
+			"is_stale":   memories[i].IsStale,
+			"created_at": memories[i].CreatedAt.Format(time.RFC3339),
 		}
 	}
 
@@ -225,42 +225,45 @@ func extractAnchors(params map[string]interface{}) []memory.CodeAnchor {
 		if anchorsSlice, ok := anchorsRaw.([]interface{}); ok {
 			anchors := make([]memory.CodeAnchor, 0, len(anchorsSlice))
 			for _, a := range anchorsSlice {
-				if anchorMap, ok := a.(map[string]interface{}); ok {
-					anchor := memory.CodeAnchor{}
-
-					// Validate file is non-empty
-					if file, ok := anchorMap["file"].(string); ok && file != "" {
-						anchor.File = file
-					} else {
-						continue // Skip invalid anchors
-					}
-
-					if function, ok := anchorMap["function"].(string); ok {
-						anchor.Function = function
-					}
-
-					var startLine, endLine int
-					if sl, ok := anchorMap["start_line"].(float64); ok {
-						startLine = int(sl)
-					}
-					if el, ok := anchorMap["end_line"].(float64); ok {
-						endLine = int(el)
-					}
-
-					// Validate line numbers
-					if startLine > 0 && endLine > 0 {
-						if startLine <= endLine {
-							anchor.StartLine = startLine
-							anchor.EndLine = endLine
-						} else {
-							continue // Skip invalid line ranges
-						}
-					} else if startLine > 0 || endLine > 0 {
-						continue // Skip partial line ranges
-					}
-
-					anchors = append(anchors, anchor)
+				anchorMap, ok := a.(map[string]interface{})
+				if !ok {
+					continue
 				}
+
+				anchor := memory.CodeAnchor{}
+
+				// Validate file is non-empty
+				if file, ok := anchorMap["file"].(string); ok && file != "" {
+					anchor.File = file
+				} else {
+					continue // Skip invalid anchors
+				}
+
+				if function, ok := anchorMap["function"].(string); ok {
+					anchor.Function = function
+				}
+
+				var startLine, endLine int
+				if sl, ok := anchorMap["start_line"].(float64); ok {
+					startLine = int(sl)
+				}
+				if el, ok := anchorMap["end_line"].(float64); ok {
+					endLine = int(el)
+				}
+
+				// Validate line numbers
+				if startLine > 0 && endLine > 0 {
+					if startLine <= endLine {
+						anchor.StartLine = startLine
+						anchor.EndLine = endLine
+					} else {
+						continue // Skip invalid line ranges
+					}
+				} else if startLine > 0 || endLine > 0 {
+					continue // Skip partial line ranges
+				}
+
+				anchors = append(anchors, anchor)
 			}
 			return anchors
 		}
