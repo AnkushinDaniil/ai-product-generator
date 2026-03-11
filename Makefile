@@ -1,7 +1,7 @@
 # Memex MCP Server - Makefile
 # Go-based Model Context Protocol server for persistent memory
 
-.PHONY: all build run test lint clean help vuln trivy trivy-image security fmt-check deps deps-check deps-verify ci ci-quick
+.PHONY: all build run test lint clean help vuln trivy trivy-image security fmt-check deps deps-check deps-verify ci ci-quick install uninstall
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 LDFLAGS := -ldflags "-X main.version=$(VERSION)"
@@ -147,6 +147,23 @@ docker-build:
 docker-run:
 	docker run memex:$(VERSION)
 
+# Install to $(HOME)/.local/bin
+install: build
+	@echo "Installing memex to $(HOME)/.local/bin/"
+	@mkdir -p $(HOME)/.local/bin
+	@cp bin/memex $(HOME)/.local/bin/memex
+	@chmod +x $(HOME)/.local/bin/memex
+	@echo "✓ Installed to $(HOME)/.local/bin/memex"
+	@echo ""
+	@echo "Make sure $(HOME)/.local/bin is in your PATH:"
+	@echo "  export PATH=\"\$$HOME/.local/bin:\$$PATH\""
+
+# Uninstall from $(HOME)/.local/bin
+uninstall:
+	@echo "Uninstalling memex from $(HOME)/.local/bin/"
+	@rm -f $(HOME)/.local/bin/memex
+	@echo "✓ Uninstalled"
+
 # Help
 help:
 	@echo "Available targets:"
@@ -185,6 +202,10 @@ help:
 	@echo "DOCKER:"
 	@echo "  docker-build   - Build Docker image"
 	@echo "  docker-run     - Run Docker container"
+	@echo ""
+	@echo "INSTALLATION:"
+	@echo "  install        - Install memex to ~/.local/bin"
+	@echo "  uninstall      - Uninstall memex from ~/.local/bin"
 	@echo ""
 	@echo "MISC:"
 	@echo "  tools          - Install dev tools"
