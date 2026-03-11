@@ -226,8 +226,8 @@ func TestToolsList(t *testing.T) {
 		t.Fatal("Tools is not an array")
 	}
 
-	if len(tools) != 0 {
-		t.Errorf("Expected empty tools array (stub), got %d tools", len(tools))
+	if len(tools) != 5 {
+		t.Errorf("Expected 5 tools, got %d tools", len(tools))
 	}
 }
 
@@ -335,40 +335,13 @@ func TestToolsCallStub(t *testing.T) {
 	// Parse response
 	resp := parseResponse(t, output)
 
-	// Verify response (stub should return "not yet implemented")
-	if resp.Error != nil {
-		t.Errorf("Expected no error, got %+v", resp.Error)
+	// Verify response (should get "tool not found" error for unknown tool)
+	if resp.Error == nil {
+		t.Error("Expected error for unknown tool, got nil")
 	}
 
-	if resp.Result == nil {
-		t.Fatal("Expected result, got nil")
-	}
-
-	resultMap, ok := resp.Result.(map[string]interface{})
-	if !ok {
-		t.Fatal("Result is not a map")
-	}
-
-	content, ok := resultMap["content"].([]interface{})
-	if !ok {
-		t.Fatal("Content is not an array")
-	}
-
-	if len(content) == 0 {
-		t.Fatal("Expected content array to have elements")
-	}
-
-	firstContent, ok := content[0].(map[string]interface{})
-	if !ok {
-		t.Fatal("First content element is not a map")
-	}
-
-	if firstContent["type"] != "text" {
-		t.Errorf("Expected content type 'text', got %v", firstContent["type"])
-	}
-
-	if firstContent["text"] != "Tool not yet implemented" {
-		t.Errorf("Expected stub message, got %v", firstContent["text"])
+	if resp.Error.Code != MethodNotFound {
+		t.Errorf("Expected error code %d, got %d", MethodNotFound, resp.Error.Code)
 	}
 }
 
