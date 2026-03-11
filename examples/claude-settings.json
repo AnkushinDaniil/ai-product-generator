@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "memex": {
+      "command": "memex",
+      "args": [],
+      "env": {
+        "MEMEX_DATABASE_PATH": "~/.memex/memex.db",
+        "MEMEX_LOG_LEVEL": "info",
+        "MEMEX_MODE": "local"
+      }
+    }
+  }
+}
