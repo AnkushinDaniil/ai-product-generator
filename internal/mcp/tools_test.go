@@ -26,7 +26,9 @@ func setupTestServer(t *testing.T) *Server {
 	server := NewServer(memService)
 
 	t.Cleanup(func() {
-		_ = store.Close()
+		if err := store.Close(); err != nil {
+			t.Errorf("Failed to close storage: %v", err)
+		}
 	})
 
 	return server
@@ -44,7 +46,10 @@ func TestRememberBasic(t *testing.T) {
 		t.Fatalf("executeRemember failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
 	if resultMap["memory_id"] == "" {
 		t.Error("Expected memory_id to be set")
 	}
@@ -63,7 +68,10 @@ func TestRememberWithTags(t *testing.T) {
 		t.Fatalf("executeRemember failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
 	if resultMap["memory_id"] == "" {
 		t.Error("Expected memory_id to be set")
 	}
@@ -75,8 +83,14 @@ func TestRememberWithTags(t *testing.T) {
 		t.Fatalf("executeList failed: %v", err)
 	}
 
-	listMap := listResult.(map[string]interface{})
-	memories := listMap["memories"].([]map[string]interface{})
+	listMap, ok := listResult.(map[string]interface{})
+	if !ok {
+		t.Fatal("List result is not a map")
+	}
+	memories, ok := listMap["memories"].([]map[string]interface{})
+	if !ok {
+		t.Fatal("Memories is not a slice of maps")
+	}
 
 	if len(memories) != 1 {
 		t.Errorf("Expected 1 memory, got %d", len(memories))
@@ -115,8 +129,14 @@ func TestRecallFound(t *testing.T) {
 		t.Fatalf("executeRecall failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	memories := resultMap["memories"].([]map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	memories, ok := resultMap["memories"].([]map[string]interface{})
+	if !ok {
+		t.Fatal("Memories is not a slice of maps")
+	}
 
 	if len(memories) != 1 {
 		t.Errorf("Expected 1 memory, got %d", len(memories))
@@ -135,8 +155,14 @@ func TestRecallNotFound(t *testing.T) {
 		t.Fatalf("executeRecall failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	memories := resultMap["memories"].([]map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	memories, ok := resultMap["memories"].([]map[string]interface{})
+	if !ok {
+		t.Fatal("Memories is not a slice of maps")
+	}
 
 	if len(memories) != 0 {
 		t.Errorf("Expected 0 memories, got %d", len(memories))
@@ -169,8 +195,15 @@ func TestForgetExisting(t *testing.T) {
 		t.Fatalf("executeForget failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	if !resultMap["success"].(bool) {
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	success, ok := resultMap["success"].(bool)
+	if !ok {
+		t.Fatal("Success is not a bool")
+	}
+	if !success {
 		t.Error("Expected success to be true")
 	}
 }
@@ -196,8 +229,14 @@ func TestListEmpty(t *testing.T) {
 		t.Fatalf("executeList failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	memories := resultMap["memories"].([]map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	memories, ok := resultMap["memories"].([]map[string]interface{})
+	if !ok {
+		t.Fatal("Memories is not a slice of maps")
+	}
 
 	if len(memories) != 0 {
 		t.Errorf("Expected 0 memories, got %d", len(memories))
@@ -208,8 +247,12 @@ func TestListWithMemories(t *testing.T) {
 	server := setupTestServer(t)
 
 	// Create test memories
-	_, _ = server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 1"})
-	_, _ = server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 2"})
+	if _, err := server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 1"}); err != nil {
+		t.Fatalf("executeRemember failed: %v", err)
+	}
+	if _, err := server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 2"}); err != nil {
+		t.Fatalf("executeRemember failed: %v", err)
+	}
 
 	params := map[string]interface{}{}
 
@@ -218,8 +261,14 @@ func TestListWithMemories(t *testing.T) {
 		t.Fatalf("executeList failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	memories := resultMap["memories"].([]map[string]interface{})
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	memories, ok := resultMap["memories"].([]map[string]interface{})
+	if !ok {
+		t.Fatal("Memories is not a slice of maps")
+	}
 
 	if len(memories) != 2 {
 		t.Errorf("Expected 2 memories, got %d", len(memories))
@@ -230,8 +279,12 @@ func TestStats(t *testing.T) {
 	server := setupTestServer(t)
 
 	// Create test memories
-	_, _ = server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 1", "type": "general"})
-	_, _ = server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 2", "type": "bug-fix"})
+	if _, err := server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 1", "type": "general"}); err != nil {
+		t.Fatalf("executeRemember failed: %v", err)
+	}
+	if _, err := server.executeRemember(context.Background(), map[string]interface{}{"content": "Memory 2", "type": "bug-fix"}); err != nil {
+		t.Fatalf("executeRemember failed: %v", err)
+	}
 
 	params := map[string]interface{}{}
 
@@ -240,8 +293,14 @@ func TestStats(t *testing.T) {
 		t.Fatalf("executeStats failed: %v", err)
 	}
 
-	resultMap := result.(map[string]interface{})
-	totalMemories := resultMap["total_memories"].(int)
+	resultMap, ok := result.(map[string]interface{})
+	if !ok {
+		t.Fatal("Result is not a map")
+	}
+	totalMemories, ok := resultMap["total_memories"].(int)
+	if !ok {
+		t.Fatal("Total memories is not an int")
+	}
 
 	if totalMemories != 2 {
 		t.Errorf("Expected 2 total memories, got %d", totalMemories)
