@@ -20,7 +20,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build \
     -o /memex ./cmd/memex
 
 # Runtime stage
-FROM alpine:3.19
+FROM alpine:3.23
 
 WORKDIR /app
 
